@@ -1,0 +1,5 @@
+rootProject.name = 'wh40k-army-organizer'
+
+include 'application'
+include 'inbound'
+include 'domain'

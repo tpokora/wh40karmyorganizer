@@ -1,0 +1,3 @@
+springBoot {
+    mainClassName = 'org.tpokora.wh40karmyorganizer.Wh40kArmyOrganizerApplication'
+}
