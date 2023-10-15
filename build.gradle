@@ -27,6 +27,10 @@ subprojects {
                 entry 'spring-boot-starter-web'
                 entry 'spring-boot-starter-test'
             }
+            dependencySet(group: 'com.fasterxml.jackson.core', version: '2.15.3') {
+                entry 'jackson-core'
+                entry 'jackson-databind'
+            }
 
             dependency 'org.projectlombok:lombok:1.18.30'
 
