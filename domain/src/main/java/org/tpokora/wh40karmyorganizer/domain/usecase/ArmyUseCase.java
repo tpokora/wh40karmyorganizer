@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ArmyUseCase {
 
-    public List<Army> getAllArmies();
+    List<Army> getAllArmies();
 }

@@ -1,10 +1,13 @@
-package org.tpokora.wh40karmyorganizer.inbound.army;
+package org.tpokora.wh40karmyorganizer.inbound.army.army;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
@@ -18,10 +21,10 @@ public class ArmyController {
 
     private final ArmyUseCase armyUseCase;
 
-    @GetMapping(value = "/api/army", produces = "application/json")
+    @GetMapping(value = "/api/army", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Army>> getAllArmies() {
         log.info("Retrieve all Armies");
         List<Army> allArmies = armyUseCase.getAllArmies();
-        return new ResponseEntity<>(allArmies, HttpStatus.OK);
+        return ResponseEntity.ok(allArmies);
     }
 }

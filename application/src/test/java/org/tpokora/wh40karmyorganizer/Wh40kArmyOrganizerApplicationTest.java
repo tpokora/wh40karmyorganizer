@@ -2,15 +2,14 @@ package org.tpokora.wh40karmyorganizer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.springframework.test.util.AssertionErrors.assertTrue;
+import org.springframework.test.util.AssertionErrors;
 
 @SpringBootTest
-class Wh40kArmyOrganizerApplicationTests {
+class Wh40kArmyOrganizerApplicationTest {
 
     @Test
     void contextLoads() {
-        assertTrue("true", true);
+        AssertionErrors.assertTrue("true", true);
     }
 
 }

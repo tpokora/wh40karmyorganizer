@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ArmyService implements ArmyUseCase {
+
     @Override
     public List<Army> getAllArmies() {
         return Arrays.asList(new Army("romper"));

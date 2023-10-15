@@ -1,9 +1,10 @@
-package org.tpokora.wh40karmyorganizer.domain.usecase;
+package wh40karmyorganizer.domain.usecase;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.service.ArmyService;
+import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 
 import java.util.List;
 
