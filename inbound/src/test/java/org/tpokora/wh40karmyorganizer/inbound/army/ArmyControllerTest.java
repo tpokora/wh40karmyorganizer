@@ -1,5 +1,6 @@
 package org.tpokora.wh40karmyorganizer.inbound.army;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -40,5 +42,17 @@ class ArmyControllerTest {
         // then
         mockMvc.perform(get(ARMY_API_URL).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldSaveArmyAndReturnWitStatusCode201() throws Exception {
+        // given
+        Army testArmy = new Army(TEST_ARMY);
+
+        // then
+        mockMvc.perform(post(ARMY_API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(testArmy)))
+                .andExpect(status().isCreated());
     }
 }

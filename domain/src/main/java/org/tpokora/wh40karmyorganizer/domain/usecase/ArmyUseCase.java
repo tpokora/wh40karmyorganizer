@@ -8,4 +8,6 @@ import java.util.List;
 public interface ArmyUseCase {
 
     List<Army> getAllArmies();
+
+    void save(Army army);
 }
