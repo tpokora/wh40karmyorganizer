@@ -1,5 +1,5 @@
 group = 'org.tpokora'
-archivesBaseName = 'inbound-adapter'
+archivesBaseName = 'outbound-adapter'
 version = '0.0.1-SNAPSHOT'
 
 java {
