@@ -28,11 +28,11 @@ class InMemoryArmyPersistenceServiceTest {
     @Test
     void shouldReturnAllArmies() {
         // given
-        Army testArmy = new Army("test_army");
+        var testArmy = new Army("test_army");
         this.inMemoryArmyPersistenceService.save(testArmy);
 
         // when
-        List<Army> allArmies = this.inMemoryArmyPersistenceService.getAllArmies();
+        var allArmies = this.inMemoryArmyPersistenceService.getAllArmies();
 
         // then
         assertThat(allArmies.size()).isEqualTo(1);
@@ -43,7 +43,7 @@ class InMemoryArmyPersistenceServiceTest {
     @Test
     void shouldReturnArmyByName() {
         // given
-        Army testArmy = new Army("test_army");
+        var testArmy = new Army("test_army");
         this.inMemoryArmyPersistenceService.save(testArmy);
 
         // when
