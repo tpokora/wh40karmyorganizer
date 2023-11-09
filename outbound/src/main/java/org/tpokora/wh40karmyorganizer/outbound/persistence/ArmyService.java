@@ -27,6 +27,9 @@ public class ArmyService {
     }
 
     public void save(Army army) {
+        if (armyRepository.existsArmyEntityByName(army.name())) {
+            throw new ArmyAlreadyExistException(army.name());
+        }
         armyRepository.save(toEntity(army));
     }
 

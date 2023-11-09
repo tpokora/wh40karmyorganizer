@@ -16,6 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 class ArmyServiceTest {
 
+    private static final String TEST_ARMY_NAME = "test_army";
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
             "postgres:15-alpine"
     );
@@ -74,7 +75,7 @@ class ArmyServiceTest {
     @Test
     void shouldReturnArmyByName() {
         // given
-        var testArmy = new ArmyEntity("test_army");
+        var testArmy = new ArmyEntity(TEST_ARMY_NAME);
         this.armyRepository.save(testArmy);
 
         // when
@@ -95,7 +96,7 @@ class ArmyServiceTest {
     @Test
     void shouldSaveArmy() {
         // given
-        var testArmy = new Army("test_army");
+        var testArmy = new Army(TEST_ARMY_NAME);
 
         // when
         this.armyService.save(testArmy);
@@ -103,5 +104,21 @@ class ArmyServiceTest {
 
         // then
         assertThat(expectedArmy.name()).isEqualTo(testArmy.name());
+    }
+
+    @Test
+    void shouldThrowExceptionIfArmyAlreadyExists() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.armyRepository.save(toEntity(testArmy));
+
+        // expect
+        Assertions.assertThrows(ArmyAlreadyExistException.class, () -> {
+            this.armyService.save(testArmy);
+        });
+    }
+
+    private ArmyEntity toEntity(Army army) {
+        return new ArmyEntity(army.name());
     }
 }

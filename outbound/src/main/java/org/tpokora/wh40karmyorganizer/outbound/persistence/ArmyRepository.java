@@ -8,4 +8,5 @@ import java.util.Optional;
 interface ArmyRepository extends JpaRepository<ArmyEntity, Integer> {
 
     Optional<ArmyEntity> findByName(String name);
+    boolean existsArmyEntityByName(String name);
 }
