@@ -17,6 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class ArmyServiceTest {
 
     private static final String TEST_ARMY_NAME = "test_army";
+    private static final String NOT_EXISTING_ARMY = "NOT_EXISTING_ARMY";
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
             "postgres:15-alpine"
     );
@@ -88,9 +89,7 @@ class ArmyServiceTest {
     @Test
     void shouldThrowExceptionIfArmyDoesNotExist() {
         // expect
-        Assertions.assertThrows(ArmyNotExistException.class, () -> {
-           this.armyService.getArmyByName("NOT_EXISTING_ARMY");
-        });
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyService.getArmyByName(NOT_EXISTING_ARMY));
     }
 
     @Test
@@ -113,9 +112,29 @@ class ArmyServiceTest {
         this.armyRepository.save(toEntity(testArmy));
 
         // expect
-        Assertions.assertThrows(ArmyAlreadyExistException.class, () -> {
-            this.armyService.save(testArmy);
-        });
+        Assertions.assertThrows(ArmyAlreadyExistException.class, () -> this.armyService.save(testArmy));
+    }
+
+    @Test
+    void shouldDeleteArmy() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.armyRepository.save(toEntity(testArmy));
+
+        // when
+        this.armyService.delete(testArmy);
+
+        // then
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyService.getArmyByName(TEST_ARMY_NAME));
+    }
+
+    @Test
+    void shouldThrowExceptionIfArmyToDeleteDoesNotExist() {
+        // given
+        var testArmy = new Army(NOT_EXISTING_ARMY);
+
+        // expect
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyService.delete(testArmy));
     }
 
     private ArmyEntity toEntity(Army army) {

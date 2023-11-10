@@ -33,6 +33,15 @@ public class ArmyService {
         armyRepository.save(toEntity(army));
     }
 
+    public void delete(Army army) {
+        armyRepository.findByName(army.name())
+                .ifPresentOrElse(
+                        armyRepository::delete,
+                        () -> {
+                            throw new ArmyNotExistException(army.name());
+                        });
+    }
+
     private Army toArmy(ArmyEntity armyEntity) {
         return new Army(armyEntity.getName());
     }
