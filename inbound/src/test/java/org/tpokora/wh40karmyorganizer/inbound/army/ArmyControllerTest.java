@@ -14,8 +14,7 @@ import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,7 +33,7 @@ class ArmyControllerTest {
     @Test
     void shouldReturnAllArmiesWithStatusCode200() throws Exception {
         // given
-        Army testArmy = new Army(TEST_ARMY);
+        var testArmy = new Army(TEST_ARMY);
 
         // when
         Mockito.when(armyService.getAll()).thenReturn(List.of(testArmy));
@@ -47,12 +46,24 @@ class ArmyControllerTest {
     @Test
     void shouldSaveArmyAndReturnWitStatusCode201() throws Exception {
         // given
-        Army testArmy = new Army(TEST_ARMY);
+        var testArmy = new Army(TEST_ARMY);
 
         // then
         mockMvc.perform(post(ARMY_API_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(testArmy)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void shouldRemoveArmyAndReturnWitStatusCode200() throws Exception {
+        // given
+        var testArmy = new Army(TEST_ARMY);
+
+        // then
+        mockMvc.perform(delete(ARMY_API_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(testArmy)))
+                .andExpect(status().isOk());
     }
 }
