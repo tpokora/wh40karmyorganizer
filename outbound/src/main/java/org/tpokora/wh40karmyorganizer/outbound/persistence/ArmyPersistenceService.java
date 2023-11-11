@@ -8,6 +8,7 @@ import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.port.PersistencePort;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +35,23 @@ public class ArmyPersistenceService implements PersistencePort {
     }
 
     public void save(Army army) {
-        if (armyRepository.existsArmyEntityByName(army.name())) {
+        if (checkIfArmyExists(army)) {
             throw new ArmyAlreadyExistException(army.name());
         }
         armyRepository.save(toEntity(army));
+    }
+
+
+    @Override
+    public Army update(Army existingArmy, Army updatedArmy) {
+        var armyByName = armyRepository.findByName(existingArmy.name())
+                .orElseThrow(() -> new ArmyNotExistException(existingArmy.name()));
+        if (checkIfArmyExists(updatedArmy)) {
+            throw new ArmyAlreadyExistException(updatedArmy.name());
+        }
+        updateArmyEntity(armyByName, updatedArmy);
+        this.armyRepository.save(armyByName);
+        return toArmy(armyByName);
     }
 
     public void delete(Army army) {
@@ -47,6 +61,14 @@ public class ArmyPersistenceService implements PersistencePort {
                         () -> {
                             throw new ArmyNotExistException(army.name());
                         });
+    }
+
+    private void updateArmyEntity(ArmyEntity existingArmy, Army updatedArmy) {
+        existingArmy.setName(updatedArmy.name());
+    }
+
+    private boolean checkIfArmyExists(Army army) {
+        return armyRepository.existsArmyEntityByName(army.name());
     }
 
     private Army toArmy(ArmyEntity armyEntity) {

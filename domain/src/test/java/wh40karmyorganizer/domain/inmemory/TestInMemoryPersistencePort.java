@@ -30,8 +30,15 @@ public class TestInMemoryPersistencePort implements PersistencePort {
 
     @Override
     public void delete(String name) {
-
+        Army armyByName = getArmyByName(name);
+        STORAGE.remove(armyByName);
     }
+
+    @Override
+    public Army update(Army existingArmy, Army updatedArmy) {
+        return null;
+    }
+
 
     public void clearStorage() {
         STORAGE.clear();

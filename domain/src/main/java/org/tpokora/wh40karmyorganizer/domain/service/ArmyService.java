@@ -31,4 +31,9 @@ public class ArmyService implements ArmyUseCase {
     public void delete(String name) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Army update(Army existingArmy, Army updatedArmy) {
+        return null;
+    }
 }

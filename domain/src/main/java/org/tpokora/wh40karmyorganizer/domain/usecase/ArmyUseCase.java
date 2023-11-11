@@ -14,4 +14,6 @@ public interface ArmyUseCase {
     Army getByName(String name);
     
     void delete(String name);
+
+    Army update(Army existingArmy, Army updatedArmy);
 }

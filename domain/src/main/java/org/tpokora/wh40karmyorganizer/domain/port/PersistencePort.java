@@ -13,4 +13,6 @@ public interface PersistencePort {
     Army getArmyByName(String name);
 
     void delete(String name);
+
+    Army update(Army existingArmy, Army updatedArmy);
 }

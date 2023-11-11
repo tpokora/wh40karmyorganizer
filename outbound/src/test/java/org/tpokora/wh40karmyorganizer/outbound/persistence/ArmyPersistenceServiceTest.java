@@ -138,6 +138,42 @@ class ArmyPersistenceServiceTest {
         Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.delete(testArmy));
     }
 
+    @Test
+    void shouldUpdateArmy() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.armyRepository.save(toEntity(testArmy));
+        var updatedArmy = new Army("updated_test_army");
+
+        // when
+        this.armyPersistenceService.update(testArmy, updatedArmy);
+
+        // then
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getArmyByName(TEST_ARMY_NAME));
+        var expectedArmy = this.armyPersistenceService.getArmyByName(updatedArmy.name());
+        assertThat(expectedArmy.name()).isEqualTo(updatedArmy.name());
+    }
+
+    @Test
+    void shouldThrowExceptionIfTryingToUpdateNotExistingArmyUpdateArmy() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        var updatedArmy = new Army("updated_test_army");
+
+        // then
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.update(testArmy, updatedArmy));
+    }
+
+    @Test
+    void shouldThrowExceptionIfTryingToUpdateArmyWithArmyWithNameAlreadyExist() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.armyRepository.save(toEntity(testArmy));
+
+        // then
+        Assertions.assertThrows(ArmyAlreadyExistException.class, () -> this.armyPersistenceService.update(testArmy, testArmy));
+    }
+
     private ArmyEntity toEntity(Army army) {
         return new ArmyEntity(army.name());
     }
