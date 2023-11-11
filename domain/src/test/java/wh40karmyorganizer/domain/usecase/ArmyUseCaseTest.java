@@ -8,12 +8,11 @@ import org.tpokora.wh40karmyorganizer.domain.service.ArmyService;
 import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 import wh40karmyorganizer.domain.inmemory.TestInMemoryPersistencePort;
 
-import java.util.List;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ArmyUseCaseTest {
 
+    public static final String TEST_ARMY_NAME = "test_army";
     private ArmyUseCase armyUseCase;
     private TestInMemoryPersistencePort testInMemoryPersistencePort;
 
@@ -31,11 +30,11 @@ class ArmyUseCaseTest {
     @Test
     void shouldReturnAllArmies() {
         // given
-        Army testArmy = new Army("test_army");
+        var testArmy = new Army(TEST_ARMY_NAME);
         this.testInMemoryPersistencePort.save(testArmy);
 
         // when
-        List<Army> allArmies = this.armyUseCase.getAll();
+        var allArmies = this.armyUseCase.getAll();
 
         // then
         assertThat(allArmies.size()).isEqualTo(1);
@@ -45,13 +44,56 @@ class ArmyUseCaseTest {
     @Test
     void shouldSaveArmy() {
         // given
-        Army testArmy = new Army("test_army");
+        var testArmy = new Army(TEST_ARMY_NAME);
 
         // when
         this.armyUseCase.save(testArmy);
 
         // then
-        Army army = this.testInMemoryPersistencePort.getArmyByName(testArmy.name());
+        var army = this.testInMemoryPersistencePort.getArmyByName(testArmy.name());
         assertThat(army.name()).isEqualTo(testArmy.name());
+    }
+
+    @Test
+    void shouldDeleteArmy() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.armyUseCase.save(testArmy);
+
+        // when
+        assertThat(this.armyUseCase.getAll().isEmpty()).isFalse();
+        this.armyUseCase.delete(testArmy.name());
+
+        // expected
+        assertThat(this.armyUseCase.getAll().isEmpty()).isTrue();
+    }
+
+    @Test
+    void shouldReturnArmyByName() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.testInMemoryPersistencePort.save(testArmy);
+
+        // when
+        var expectedArmy = this.armyUseCase.getByName(TEST_ARMY_NAME);
+
+        // then
+        assertThat(expectedArmy).isNotNull();
+        assertThat(expectedArmy.name()).isEqualTo(testArmy.name());
+    }
+
+    @Test
+    void shouldUpdateArmy() {
+        // given
+        var testArmy = new Army(TEST_ARMY_NAME);
+        this.testInMemoryPersistencePort.save(testArmy);
+        var updatedArmyName = new Army("updated_test_army");
+
+        // when
+        var update = this.armyUseCase.update(testArmy, updatedArmyName);
+
+        // then
+        var expectedArmy = this.armyUseCase.getByName(updatedArmyName.name());
+        assertThat(expectedArmy).isNotNull();
     }
 }

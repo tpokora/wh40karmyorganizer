@@ -24,16 +24,16 @@ public class ArmyService implements ArmyUseCase {
 
     @Override
     public Army getByName(String name) {
-        return null;
+        return persistencePort.getArmyByName(name);
     }
 
     @Override
     public void delete(String name) {
-        throw new UnsupportedOperationException();
+        persistencePort.delete(name);
     }
 
     @Override
     public Army update(Army existingArmy, Army updatedArmy) {
-        return null;
+        return persistencePort.update(existingArmy, updatedArmy);
     }
 }

@@ -1,11 +1,13 @@
 package wh40karmyorganizer.domain.inmemory;
 
+import org.tpokora.wh40karmyorganizer.domain.exception.ArmyAlreadyExistException;
 import org.tpokora.wh40karmyorganizer.domain.exception.ArmyNotExistException;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.port.PersistencePort;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class TestInMemoryPersistencePort implements PersistencePort {
     private static final LinkedList<Army> STORAGE = new LinkedList<>();
@@ -30,13 +32,20 @@ public class TestInMemoryPersistencePort implements PersistencePort {
 
     @Override
     public void delete(String name) {
-        Army armyByName = getArmyByName(name);
+        var armyByName = getArmyByName(name);
         STORAGE.remove(armyByName);
     }
 
     @Override
     public Army update(Army existingArmy, Army updatedArmy) {
-        return null;
+        getArmyByName(existingArmy.name());
+        if (STORAGE.stream()
+                .anyMatch(army -> army.name().equals(updatedArmy.name()))) {
+            throw new ArmyAlreadyExistException(updatedArmy.name());
+        }
+        delete(existingArmy.name());
+        save(updatedArmy);
+        return updatedArmy;
     }
 
 
