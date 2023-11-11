@@ -24,7 +24,7 @@ public class ArmyController {
     @GetMapping(value = "/api/army", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Army>> getAllArmies() {
         log.info(">>> Retrieve all Armies");
-        List<Army> allArmies = armyUseCase.getAllArmies();
+        List<Army> allArmies = armyUseCase.getAll();
         return ResponseEntity.ok(allArmies);
     }
 

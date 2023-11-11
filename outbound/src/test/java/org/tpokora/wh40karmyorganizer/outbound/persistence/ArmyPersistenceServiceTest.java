@@ -6,15 +6,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.tpokora.wh40karmyorganizer.domain.exception.ArmyAlreadyExistException;
+import org.tpokora.wh40karmyorganizer.domain.exception.ArmyNotExistException;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
-import org.tpokora.wh40karmyorganizer.outbound.persistence.entity.ArmyEntity;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-class ArmyServiceTest {
+class ArmyPersistenceServiceTest {
 
     private static final String TEST_ARMY_NAME = "test_army";
     private static final String NOT_EXISTING_ARMY = "NOT_EXISTING_ARMY";
@@ -32,7 +33,7 @@ class ArmyServiceTest {
     @Autowired
     private ArmyRepository armyRepository;
 
-    private ArmyService armyService;
+    private ArmyPersistenceService armyPersistenceService;
 
     @BeforeAll
     static void beforeAll() {
@@ -47,7 +48,7 @@ class ArmyServiceTest {
     @BeforeEach
     void setUp() {
         armyRepository.deleteAll();
-        armyService = new ArmyService(armyRepository);
+        armyPersistenceService = new ArmyPersistenceService(armyRepository);
     }
 
     @Test
@@ -61,7 +62,7 @@ class ArmyServiceTest {
         this.armyRepository.saveAll(armies);
 
         // when
-        var allArmies = armyService.getAllArmies();
+        var allArmies = armyPersistenceService.getAllArmies();
 
         // then
         assertThat(allArmies.size()).isEqualTo(2);
@@ -80,7 +81,7 @@ class ArmyServiceTest {
         this.armyRepository.save(testArmy);
 
         // when
-        var expectedArmy = this.armyService.getArmyByName(testArmy.getName());
+        var expectedArmy = this.armyPersistenceService.getArmyByName(testArmy.getName());
 
         // then
         assertThat(expectedArmy.name()).isEqualTo(testArmy.getName());
@@ -89,7 +90,7 @@ class ArmyServiceTest {
     @Test
     void shouldThrowExceptionIfArmyDoesNotExist() {
         // expect
-        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyService.getArmyByName(NOT_EXISTING_ARMY));
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getArmyByName(NOT_EXISTING_ARMY));
     }
 
     @Test
@@ -98,8 +99,8 @@ class ArmyServiceTest {
         var testArmy = new Army(TEST_ARMY_NAME);
 
         // when
-        this.armyService.save(testArmy);
-        var expectedArmy = this.armyService.getArmyByName(testArmy.name());
+        this.armyPersistenceService.save(testArmy);
+        var expectedArmy = this.armyPersistenceService.getArmyByName(testArmy.name());
 
         // then
         assertThat(expectedArmy.name()).isEqualTo(testArmy.name());
@@ -112,7 +113,7 @@ class ArmyServiceTest {
         this.armyRepository.save(toEntity(testArmy));
 
         // expect
-        Assertions.assertThrows(ArmyAlreadyExistException.class, () -> this.armyService.save(testArmy));
+        Assertions.assertThrows(ArmyAlreadyExistException.class, () -> this.armyPersistenceService.save(testArmy));
     }
 
     @Test
@@ -122,10 +123,10 @@ class ArmyServiceTest {
         this.armyRepository.save(toEntity(testArmy));
 
         // when
-        this.armyService.delete(testArmy);
+        this.armyPersistenceService.delete(testArmy);
 
         // then
-        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyService.getArmyByName(TEST_ARMY_NAME));
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getArmyByName(TEST_ARMY_NAME));
     }
 
     @Test
@@ -134,7 +135,7 @@ class ArmyServiceTest {
         var testArmy = new Army(NOT_EXISTING_ARMY);
 
         // expect
-        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyService.delete(testArmy));
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.delete(testArmy));
     }
 
     private ArmyEntity toEntity(Army army) {

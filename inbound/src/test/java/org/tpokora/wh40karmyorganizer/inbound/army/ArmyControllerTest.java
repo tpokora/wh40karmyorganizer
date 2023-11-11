@@ -37,7 +37,7 @@ class ArmyControllerTest {
         Army testArmy = new Army(TEST_ARMY);
 
         // when
-        Mockito.when(armyService.getAllArmies()).thenReturn(List.of(testArmy));
+        Mockito.when(armyService.getAll()).thenReturn(List.of(testArmy));
 
         // then
         mockMvc.perform(get(ARMY_API_URL).contentType(MediaType.APPLICATION_JSON))

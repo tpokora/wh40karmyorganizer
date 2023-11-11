@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence.entity;
+package org.tpokora.wh40karmyorganizer.outbound.persistence;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class ArmyEntity {
+class ArmyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

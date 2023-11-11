@@ -2,14 +2,16 @@ package org.tpokora.wh40karmyorganizer.outbound.persistence;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.tpokora.wh40karmyorganizer.domain.exception.ArmyAlreadyExistException;
+import org.tpokora.wh40karmyorganizer.domain.exception.ArmyNotExistException;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
-import org.tpokora.wh40karmyorganizer.outbound.persistence.entity.ArmyEntity;
+import org.tpokora.wh40karmyorganizer.domain.port.PersistencePort;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ArmyService {
+public class ArmyPersistenceService implements PersistencePort {
 
     private final ArmyRepository armyRepository;
 
@@ -24,6 +26,11 @@ public class ArmyService {
         return armyRepository.findByName(name)
                 .map(this::toArmy)
                 .orElseThrow(() -> new ArmyNotExistException(name));
+    }
+
+    @Override
+    public void delete(String name) {
+        throw new UnsupportedOperationException();
     }
 
     public void save(Army army) {

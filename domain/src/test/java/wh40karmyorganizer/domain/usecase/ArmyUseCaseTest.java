@@ -9,7 +9,6 @@ import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 import wh40karmyorganizer.domain.inmemory.TestInMemoryPersistencePort;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -36,7 +35,7 @@ class ArmyUseCaseTest {
         this.testInMemoryPersistencePort.save(testArmy);
 
         // when
-        List<Army> allArmies = this.armyUseCase.getAllArmies();
+        List<Army> allArmies = this.armyUseCase.getAll();
 
         // then
         assertThat(allArmies.size()).isEqualTo(1);
@@ -52,9 +51,7 @@ class ArmyUseCaseTest {
         this.armyUseCase.save(testArmy);
 
         // then
-        Optional<Army> army = this.testInMemoryPersistencePort.getArmy(testArmy.name());
-        assertThat(army).isPresent();
-        army.ifPresent(value -> assertThat(value.name()).isEqualTo(testArmy.name()));
-
+        Army army = this.testInMemoryPersistencePort.getArmyByName(testArmy.name());
+        assertThat(army.name()).isEqualTo(testArmy.name());
     }
 }

@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence;
+package org.tpokora.wh40karmyorganizer.domain.exception;
 
 public class ArmyAlreadyExistException extends RuntimeException {
 

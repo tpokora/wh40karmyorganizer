@@ -13,12 +13,22 @@ public class ArmyService implements ArmyUseCase {
     private final PersistencePort persistencePort;
 
     @Override
-    public List<Army> getAllArmies() {
+    public List<Army> getAll() {
         return persistencePort.getAllArmies();
     }
 
     @Override
     public void save(Army army) {
         persistencePort.save(army);
+    }
+
+    @Override
+    public Army getByName(String name) {
+        return null;
+    }
+
+    @Override
+    public void delete(String name) {
+        throw new UnsupportedOperationException();
     }
 }

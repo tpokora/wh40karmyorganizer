@@ -1,6 +1,6 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence;
+package org.tpokora.wh40karmyorganizer.domain.exception;
 
-class ArmyNotExistException extends RuntimeException {
+public class ArmyNotExistException extends RuntimeException {
 
     private static final String EXCEPTION_MESSAGE_FORMAT = "Army %s does not exist";
     public ArmyNotExistException(String name) {

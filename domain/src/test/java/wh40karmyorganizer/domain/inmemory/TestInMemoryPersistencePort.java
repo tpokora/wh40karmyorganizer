@@ -1,11 +1,11 @@
 package wh40karmyorganizer.domain.inmemory;
 
+import org.tpokora.wh40karmyorganizer.domain.exception.ArmyNotExistException;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.port.PersistencePort;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public class TestInMemoryPersistencePort implements PersistencePort {
     private static final LinkedList<Army> STORAGE = new LinkedList<>();
@@ -21,10 +21,16 @@ public class TestInMemoryPersistencePort implements PersistencePort {
     }
 
     @Override
-    public Optional<Army> getArmy(String name) {
+    public Army getArmyByName(String name) {
         return STORAGE.stream()
                 .filter(army -> army.name().equals(name))
-                .findFirst();
+                    .findFirst()
+                    .orElseThrow(() -> new ArmyNotExistException(name));
+    }
+
+    @Override
+    public void delete(String name) {
+
     }
 
     public void clearStorage() {
