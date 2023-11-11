@@ -21,8 +21,13 @@ public class ArmyController {
     @GetMapping(value = "/api/army", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Army>> getAllArmies() {
         log.info(">>> Retrieve all Armies");
-        List<Army> allArmies = armyUseCase.getAll();
-        return ResponseEntity.ok(allArmies);
+        return ResponseEntity.ok(armyUseCase.getAll());
+    }
+
+    @GetMapping(value = "/api/army", params="name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Army> getArmyByName(@RequestParam("name") String name) {
+        log.info(">>> Retrieve Army: {}", name);
+        return ResponseEntity.ok(armyUseCase.getByName(name));
     }
 
     @PostMapping(value = "/api/army", consumes = MediaType.APPLICATION_JSON_VALUE)
