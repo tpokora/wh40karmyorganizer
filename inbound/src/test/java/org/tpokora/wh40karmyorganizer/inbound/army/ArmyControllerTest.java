@@ -15,6 +15,7 @@ import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -82,5 +83,21 @@ class ArmyControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(testArmy)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldUpdateArmyAndReturnWitStatusCode200() throws Exception {
+        // given
+        var updatedArmy = new Army("updated_army");
+
+        // when
+        Mockito.when(armyService.update(any(), any())).thenReturn(updatedArmy);
+
+        // then
+        mockMvc.perform(put(ARMY_API_URL + "?name=" + TEST_ARMY)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(updatedArmy)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(updatedArmy.name())));
     }
 }

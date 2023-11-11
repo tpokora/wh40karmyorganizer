@@ -43,4 +43,12 @@ public class ArmyController {
         armyUseCase.delete(army.name());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping(value = "/api/army", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Army> updateArmy(@RequestParam("name") String name, @RequestBody Army updatedArmy) {
+        log.info(">>> Update army: {}", name);
+        var existingArmy = armyUseCase.getByName(name);
+        var updated = armyUseCase.update(existingArmy, updatedArmy);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
 }
