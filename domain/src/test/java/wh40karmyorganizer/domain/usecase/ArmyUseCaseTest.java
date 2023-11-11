@@ -90,7 +90,7 @@ class ArmyUseCaseTest {
         var updatedArmyName = new Army("updated_test_army");
 
         // when
-        var update = this.armyUseCase.update(testArmy, updatedArmyName);
+        this.armyUseCase.update(testArmy, updatedArmyName);
 
         // then
         var expectedArmy = this.armyUseCase.getByName(updatedArmyName.name());
