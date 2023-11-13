@@ -1,37 +1,36 @@
-package wh40karmyorganizer.domain.usecase;
+package org.tpokora.wh40karmyorganizer.domain.usecase;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.tpokora.wh40karmyorganizer.domain.inmemory.TestInMemoryArmyPersistencePort;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.service.ArmyService;
-import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
-import wh40karmyorganizer.domain.inmemory.TestInMemoryPersistencePort;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ArmyUseCaseTest {
 
-    public static final String TEST_ARMY_NAME = "test_army";
+    private static final String TEST_ARMY_NAME = "test_army";
     private ArmyUseCase armyUseCase;
-    private TestInMemoryPersistencePort testInMemoryPersistencePort;
+    private TestInMemoryArmyPersistencePort testInMemoryArmyPersistencePort;
 
     @BeforeEach
     void setup() {
-        this.testInMemoryPersistencePort = new TestInMemoryPersistencePort();
-        this.armyUseCase = new ArmyService(this.testInMemoryPersistencePort);
+        this.testInMemoryArmyPersistencePort = new TestInMemoryArmyPersistencePort();
+        this.armyUseCase = new ArmyService(this.testInMemoryArmyPersistencePort);
     }
 
     @AfterEach
     void teardown() {
-        this.testInMemoryPersistencePort.clearStorage();
+        this.testInMemoryArmyPersistencePort.clearStorage();
     }
 
     @Test
     void shouldReturnAllArmies() {
         // given
         var testArmy = new Army(TEST_ARMY_NAME);
-        this.testInMemoryPersistencePort.save(testArmy);
+        this.testInMemoryArmyPersistencePort.save(testArmy);
 
         // when
         var allArmies = this.armyUseCase.getAll();
@@ -50,7 +49,7 @@ class ArmyUseCaseTest {
         this.armyUseCase.save(testArmy);
 
         // then
-        var army = this.testInMemoryPersistencePort.getArmyByName(testArmy.name());
+        var army = this.testInMemoryArmyPersistencePort.getByName(testArmy.name());
         assertThat(army.name()).isEqualTo(testArmy.name());
     }
 
@@ -72,7 +71,7 @@ class ArmyUseCaseTest {
     void shouldReturnArmyByName() {
         // given
         var testArmy = new Army(TEST_ARMY_NAME);
-        this.testInMemoryPersistencePort.save(testArmy);
+        this.testInMemoryArmyPersistencePort.save(testArmy);
 
         // when
         var expectedArmy = this.armyUseCase.getByName(TEST_ARMY_NAME);
@@ -86,7 +85,7 @@ class ArmyUseCaseTest {
     void shouldUpdateArmy() {
         // given
         var testArmy = new Army(TEST_ARMY_NAME);
-        this.testInMemoryPersistencePort.save(testArmy);
+        this.testInMemoryArmyPersistencePort.save(testArmy);
         var updatedArmyName = new Army("updated_test_army");
 
         // when

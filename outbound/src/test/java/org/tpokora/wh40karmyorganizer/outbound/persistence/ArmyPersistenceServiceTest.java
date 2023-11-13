@@ -62,7 +62,7 @@ class ArmyPersistenceServiceTest {
         this.armyRepository.saveAll(armies);
 
         // when
-        var allArmies = armyPersistenceService.getAllArmies();
+        var allArmies = armyPersistenceService.getAll();
 
         // then
         assertThat(allArmies.size()).isEqualTo(2);
@@ -81,7 +81,7 @@ class ArmyPersistenceServiceTest {
         this.armyRepository.save(testArmy);
 
         // when
-        var expectedArmy = this.armyPersistenceService.getArmyByName(testArmy.getName());
+        var expectedArmy = this.armyPersistenceService.getByName(testArmy.getName());
 
         // then
         assertThat(expectedArmy.name()).isEqualTo(testArmy.getName());
@@ -90,7 +90,7 @@ class ArmyPersistenceServiceTest {
     @Test
     void shouldThrowExceptionIfArmyDoesNotExist() {
         // expect
-        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getArmyByName(NOT_EXISTING_ARMY));
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getByName(NOT_EXISTING_ARMY));
     }
 
     @Test
@@ -100,7 +100,7 @@ class ArmyPersistenceServiceTest {
 
         // when
         this.armyPersistenceService.save(testArmy);
-        var expectedArmy = this.armyPersistenceService.getArmyByName(testArmy.name());
+        var expectedArmy = this.armyPersistenceService.getByName(testArmy.name());
 
         // then
         assertThat(expectedArmy.name()).isEqualTo(testArmy.name());
@@ -126,7 +126,7 @@ class ArmyPersistenceServiceTest {
         this.armyPersistenceService.delete(testArmy);
 
         // then
-        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getArmyByName(TEST_ARMY_NAME));
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getByName(TEST_ARMY_NAME));
     }
 
     @Test
@@ -149,8 +149,8 @@ class ArmyPersistenceServiceTest {
         this.armyPersistenceService.update(testArmy, updatedArmy);
 
         // then
-        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getArmyByName(TEST_ARMY_NAME));
-        var expectedArmy = this.armyPersistenceService.getArmyByName(updatedArmy.name());
+        Assertions.assertThrows(ArmyNotExistException.class, () -> this.armyPersistenceService.getByName(TEST_ARMY_NAME));
+        var expectedArmy = this.armyPersistenceService.getByName(updatedArmy.name());
         assertThat(expectedArmy.name()).isEqualTo(updatedArmy.name());
     }
 

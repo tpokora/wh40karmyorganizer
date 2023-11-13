@@ -6,28 +6,28 @@ import org.springframework.stereotype.Service;
 import org.tpokora.wh40karmyorganizer.domain.exception.ArmyAlreadyExistException;
 import org.tpokora.wh40karmyorganizer.domain.exception.ArmyNotExistException;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
-import org.tpokora.wh40karmyorganizer.domain.port.PersistencePort;
+import org.tpokora.wh40karmyorganizer.domain.port.ArmyPersistencePort;
 
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ArmyPersistenceService implements PersistencePort {
+public class ArmyPersistenceService implements ArmyPersistencePort {
 
     private static final String ARMY_DOES_NOT_EXIST_ERROR_MSG = ">> Army {}, does not exist";
     private static final String ARMY_ALREADY_EXISTS_ERROR_MSG = ">> Army {}, already exists";
 
     private final ArmyRepository armyRepository;
 
-    public List<Army> getAllArmies() {
+    public List<Army> getAll() {
         return armyRepository.findAll()
                 .stream()
                 .map(this::toArmy)
                 .toList();
     }
 
-    public Army getArmyByName(String name) {
+    public Army getByName(String name) {
         return armyRepository.findByName(name)
                 .map(this::toArmy)
                 .orElseThrow(() -> {
