@@ -18,7 +18,7 @@ public class ArmyController {
 
     private final ArmyUseCase armyUseCase;
 
-    @GetMapping(value = "/api/army", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/army")
     public ResponseEntity<List<Army>> getAllArmies() {
         log.info(">>> Retrieve all Armies");
         return ResponseEntity.ok(armyUseCase.getAll());
@@ -49,6 +49,6 @@ public class ArmyController {
         log.info(">>> Update army: {}", name);
         var existingArmy = armyUseCase.getByName(name);
         var updated = armyUseCase.update(existingArmy, updatedArmy);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        return ResponseEntity.ok(updated);
     }
 }

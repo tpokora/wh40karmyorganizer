@@ -1,6 +1,7 @@
 package org.tpokora.wh40karmyorganizer.outbound.persistence;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.tpokora.wh40karmyorganizer.domain.exception.ArmyAlreadyExistException;
 import org.tpokora.wh40karmyorganizer.domain.exception.ArmyNotExistException;
@@ -8,11 +9,14 @@ import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.port.PersistencePort;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArmyPersistenceService implements PersistencePort {
+
+    private static final String ARMY_DOES_NOT_EXIST_ERROR_MSG = ">> Army {}, does not exist";
+    private static final String ARMY_ALREADY_EXISTS_ERROR_MSG = ">> Army {}, already exists";
 
     private final ArmyRepository armyRepository;
 
@@ -26,7 +30,10 @@ public class ArmyPersistenceService implements PersistencePort {
     public Army getArmyByName(String name) {
         return armyRepository.findByName(name)
                 .map(this::toArmy)
-                .orElseThrow(() -> new ArmyNotExistException(name));
+                .orElseThrow(() -> {
+                    log.error(ARMY_DOES_NOT_EXIST_ERROR_MSG, name);
+                    return new ArmyNotExistException(name);
+                });
     }
 
     @Override
@@ -36,6 +43,7 @@ public class ArmyPersistenceService implements PersistencePort {
 
     public void save(Army army) {
         if (checkIfArmyExists(army)) {
+            log.error(ARMY_ALREADY_EXISTS_ERROR_MSG, army.name());
             throw new ArmyAlreadyExistException(army.name());
         }
         armyRepository.save(toEntity(army));
@@ -47,6 +55,7 @@ public class ArmyPersistenceService implements PersistencePort {
         var armyByName = armyRepository.findByName(existingArmy.name())
                 .orElseThrow(() -> new ArmyNotExistException(existingArmy.name()));
         if (checkIfArmyExists(updatedArmy)) {
+            log.error(ARMY_ALREADY_EXISTS_ERROR_MSG, updatedArmy.name());
             throw new ArmyAlreadyExistException(updatedArmy.name());
         }
         updateArmyEntity(armyByName, updatedArmy);
@@ -59,6 +68,7 @@ public class ArmyPersistenceService implements PersistencePort {
                 .ifPresentOrElse(
                         armyRepository::delete,
                         () -> {
+                            log.error(ARMY_DOES_NOT_EXIST_ERROR_MSG, army.name());
                             throw new ArmyNotExistException(army.name());
                         });
     }
