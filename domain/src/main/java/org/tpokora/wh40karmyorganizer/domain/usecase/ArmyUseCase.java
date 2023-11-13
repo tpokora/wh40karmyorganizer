@@ -7,7 +7,13 @@ import java.util.List;
 
 public interface ArmyUseCase {
 
-    List<Army> getAllArmies();
+    List<Army> getAll();
 
     void save(Army army);
+    
+    Army getByName(String name);
+    
+    void delete(String name);
+
+    Army update(Army existingArmy, Army updatedArmy);
 }

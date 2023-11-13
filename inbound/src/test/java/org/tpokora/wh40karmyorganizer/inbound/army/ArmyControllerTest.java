@@ -14,8 +14,11 @@ import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,10 +37,10 @@ class ArmyControllerTest {
     @Test
     void shouldReturnAllArmiesWithStatusCode200() throws Exception {
         // given
-        Army testArmy = new Army(TEST_ARMY);
+        var testArmy = new Army(TEST_ARMY);
 
         // when
-        Mockito.when(armyService.getAllArmies()).thenReturn(List.of(testArmy));
+        Mockito.when(armyService.getAll()).thenReturn(List.of(testArmy));
 
         // then
         mockMvc.perform(get(ARMY_API_URL).contentType(MediaType.APPLICATION_JSON))
@@ -45,14 +48,56 @@ class ArmyControllerTest {
     }
 
     @Test
+    void shouldReturnArmyByNameWithStatusCode200() throws Exception {
+        // given
+        var testArmy = new Army(TEST_ARMY);
+
+        // when
+        Mockito.when(armyService.getByName(anyString())).thenReturn(testArmy);
+
+        // then
+        mockMvc.perform(get(ARMY_API_URL + "?name=" + TEST_ARMY).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(TEST_ARMY)));
+    }
+
+    @Test
     void shouldSaveArmyAndReturnWitStatusCode201() throws Exception {
         // given
-        Army testArmy = new Army(TEST_ARMY);
+        var testArmy = new Army(TEST_ARMY);
 
         // then
         mockMvc.perform(post(ARMY_API_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(testArmy)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void shouldRemoveArmyAndReturnWitStatusCode200() throws Exception {
+        // given
+        var testArmy = new Army(TEST_ARMY);
+
+        // then
+        mockMvc.perform(delete(ARMY_API_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(testArmy)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldUpdateArmyAndReturnWitStatusCode200() throws Exception {
+        // given
+        var updatedArmy = new Army("updated_army");
+
+        // when
+        Mockito.when(armyService.update(any(), any())).thenReturn(updatedArmy);
+
+        // then
+        mockMvc.perform(put(ARMY_API_URL + "?name=" + TEST_ARMY)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(updatedArmy)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(updatedArmy.name())));
     }
 }
