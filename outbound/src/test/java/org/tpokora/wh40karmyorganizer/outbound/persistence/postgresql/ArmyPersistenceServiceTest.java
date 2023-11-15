@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence;
+package org.tpokora.wh40karmyorganizer.outbound.persistence.postgresql;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

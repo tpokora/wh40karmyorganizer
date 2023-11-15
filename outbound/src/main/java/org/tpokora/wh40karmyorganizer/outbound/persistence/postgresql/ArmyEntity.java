@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence;
+package org.tpokora.wh40karmyorganizer.outbound.persistence.postgresql;
 
 import jakarta.persistence.*;
 import lombok.Getter;

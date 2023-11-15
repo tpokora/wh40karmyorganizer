@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence;
+package org.tpokora.wh40karmyorganizer.outbound.persistence.postgresql;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
