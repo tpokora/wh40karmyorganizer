@@ -3,12 +3,14 @@ package org.tpokora.wh40karmyorganizer.domain.usecase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.tpokora.wh40karmyorganizer.domain.exception.CollectionNotExistException;
 import org.tpokora.wh40karmyorganizer.domain.inmemory.TestInMemoryCollectionPersistencePort;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.model.Collection;
 import org.tpokora.wh40karmyorganizer.domain.service.CollectionService;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CollectionUseCaseTest {
 
@@ -28,6 +30,20 @@ class CollectionUseCaseTest {
     @AfterEach
     void teardown() {
         this.testInMemoryCollectionPersistencePort.clearStorage();
+    }
+
+    @Test
+    void shouldReturnAllCollections() {
+        // given
+        var collection = new Collection(TEST_COLLECTION_NAME, TEST_ARMY);
+        this.testInMemoryCollectionPersistencePort.save(collection);
+
+        // when
+        var allCollections = this.collectionUseCase.getAll();
+
+        // then
+        assertThat(allCollections.size()).isEqualTo(1);
+        assertThat(allCollections.get(0).name()).isEqualTo(collection.name());
     }
 
     @Test
@@ -55,5 +71,33 @@ class CollectionUseCaseTest {
         // then
         assertThat(expectedCollection).isNotNull();
         assertThat(expectedCollection.name()).isEqualTo(collection.name());
+    }
+
+    @Test
+    void shouldDeleteCollectionByName() {
+        // given
+        var collection = new Collection(TEST_COLLECTION_NAME, TEST_ARMY);
+        this.testInMemoryCollectionPersistencePort.save(collection);
+
+        // when
+        this.collectionUseCase.delete(TEST_COLLECTION_NAME);
+
+        // then
+        assertThrows(CollectionNotExistException.class, () -> this.testInMemoryCollectionPersistencePort.getByName(TEST_COLLECTION_NAME));
+    }
+
+    @Test
+    void shouldUpdateCollection() {
+        // given
+        var collection = new Collection(TEST_COLLECTION_NAME, TEST_ARMY);
+        this.testInMemoryCollectionPersistencePort.save(collection);
+        var updatedCollection = new Collection("updated_test_collection", TEST_ARMY);
+
+        // when
+        this.collectionUseCase.update(collection, updatedCollection);
+
+        // then
+        var expectedCollection = this.collectionUseCase.getByName(updatedCollection.name());
+        assertThat(expectedCollection).isNotNull();
     }
 }
