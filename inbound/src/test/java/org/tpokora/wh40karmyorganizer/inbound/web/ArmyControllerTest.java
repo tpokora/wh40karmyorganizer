@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.inbound.army;
+package org.tpokora.wh40karmyorganizer.inbound.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.tpokora.wh40karmyorganizer.domain.model.Army;
 import org.tpokora.wh40karmyorganizer.domain.usecase.ArmyUseCase;
+import org.tpokora.wh40karmyorganizer.domain.usecase.CollectionUseCase;
 
 import java.util.List;
 
@@ -20,19 +21,22 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.tpokora.wh40karmyorganizer.inbound.web.ArmyController.ARMY_API;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class ArmyControllerTest {
 
     private static final String TEST_ARMY = "test_army";
-    private static final String ARMY_API_URL = "/api/army";
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ArmyUseCase armyService;
+    private ArmyUseCase armyUseCase;
+
+    @MockBean
+    private CollectionUseCase collectionUseCase;
 
     @Test
     void shouldReturnAllArmiesWithStatusCode200() throws Exception {
@@ -40,10 +44,10 @@ class ArmyControllerTest {
         var testArmy = new Army(TEST_ARMY);
 
         // when
-        Mockito.when(armyService.getAll()).thenReturn(List.of(testArmy));
+        Mockito.when(armyUseCase.getAll()).thenReturn(List.of(testArmy));
 
         // then
-        mockMvc.perform(get(ARMY_API_URL).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(ARMY_API).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -53,10 +57,10 @@ class ArmyControllerTest {
         var testArmy = new Army(TEST_ARMY);
 
         // when
-        Mockito.when(armyService.getByName(anyString())).thenReturn(testArmy);
+        Mockito.when(armyUseCase.getByName(anyString())).thenReturn(testArmy);
 
         // then
-        mockMvc.perform(get(ARMY_API_URL + "?name=" + TEST_ARMY).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(ARMY_API + "?name=" + TEST_ARMY).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(TEST_ARMY)));
     }
@@ -67,7 +71,7 @@ class ArmyControllerTest {
         var testArmy = new Army(TEST_ARMY);
 
         // then
-        mockMvc.perform(post(ARMY_API_URL)
+        mockMvc.perform(post(ARMY_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(testArmy)))
                 .andExpect(status().isCreated());
@@ -79,7 +83,7 @@ class ArmyControllerTest {
         var testArmy = new Army(TEST_ARMY);
 
         // then
-        mockMvc.perform(delete(ARMY_API_URL)
+        mockMvc.perform(delete(ARMY_API)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(testArmy)))
                 .andExpect(status().isOk());
@@ -91,10 +95,10 @@ class ArmyControllerTest {
         var updatedArmy = new Army("updated_army");
 
         // when
-        Mockito.when(armyService.update(any(), any())).thenReturn(updatedArmy);
+        Mockito.when(armyUseCase.update(any(), any())).thenReturn(updatedArmy);
 
         // then
-        mockMvc.perform(put(ARMY_API_URL + "?name=" + TEST_ARMY)
+        mockMvc.perform(put(ARMY_API + "?name=" + TEST_ARMY)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(updatedArmy)))
                 .andExpect(status().isOk())

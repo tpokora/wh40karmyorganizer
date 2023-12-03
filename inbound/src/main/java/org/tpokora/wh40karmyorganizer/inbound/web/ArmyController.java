@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.inbound.army;
+package org.tpokora.wh40karmyorganizer.inbound.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,35 +16,37 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArmyController {
 
+    public static final String ARMY_API = "/api/army";
+
     private final ArmyUseCase armyUseCase;
 
-    @GetMapping(value = "/api/army")
+    @GetMapping(value = ARMY_API)
     public ResponseEntity<List<Army>> getAllArmies() {
         log.info(">>> Retrieve all Armies");
         return ResponseEntity.ok(armyUseCase.getAll());
     }
 
-    @GetMapping(value = "/api/army", params="name", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = ARMY_API, params="name", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Army> getArmyByName(@RequestParam("name") String name) {
         log.info(">>> Retrieve Army: {}", name);
         return ResponseEntity.ok(armyUseCase.getByName(name));
     }
 
-    @PostMapping(value = "/api/army", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = ARMY_API, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveArmy(@RequestBody Army army) {
         log.info(">>> Save army: {}", army);
         armyUseCase.save(army);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/api/army", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = ARMY_API, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteArmy(@RequestBody Army army) {
         log.info(">>> Delete army: {}", army);
         armyUseCase.delete(army.name());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/api/army", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = ARMY_API, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Army> updateArmy(@RequestParam("name") String name, @RequestBody Army updatedArmy) {
         log.info(">>> Update army: {}", name);
         var existingArmy = armyUseCase.getByName(name);

@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.outbound.persistence.postgresql;
+package org.tpokora.wh40karmyorganizer.outbound.persistence.army;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

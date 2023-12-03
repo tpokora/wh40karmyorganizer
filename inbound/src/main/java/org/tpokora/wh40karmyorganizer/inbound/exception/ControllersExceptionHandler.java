@@ -1,4 +1,4 @@
-package org.tpokora.wh40karmyorganizer.inbound.army.web;
+package org.tpokora.wh40karmyorganizer.inbound.exception;
 
 
 import org.springframework.http.HttpStatus;
