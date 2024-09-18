@@ -30,7 +30,7 @@ def create_army():
 
     save_to_file(army)
 
-    return json.dumps(army.__dict__)
+    return jsonify(army.__dict__)
 
 
 if __name__ == '__main__':
