@@ -1,33 +1,23 @@
 # __init__.py
-from flask import Flask, request, jsonify
+import logging
+from flask import Flask
 
-from app.adapter.file_handler import FileHandler
-from app.domain.army import Army
+app = Flask(__name__)
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 
 
 def create_app(app_config=None):
-    app = Flask(__name__)
     app.config.from_object(app_config)
 
-    #create_armies_list()
+    create_armies_list()
+    from app.army import bp as army_bp
+    from app.core import bp as core_bp
 
-    @app.route('/')
-    def hello_world():  # put application's code here
-        return 'Hello World!'
-
-    @app.route('/army', methods=["POST"])
-    def create_army():
-        name = request.json['name']
-        faction = request.json['faction']
-
-        army = Army(name, faction)
-
-        FileHandler.save_to_file(army, army.name)
-
-        return jsonify(army.__dict__)
+    app.register_blueprint(army_bp)
+    app.register_blueprint(core_bp)
 
     return app
 
-#def create_armies_list():
-#    pass
 
+def create_armies_list():
+    app.logger.info("Creating armies list...")
