@@ -10,8 +10,8 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 
 class FileHandler:
 
-    def save_to_file(self, data: any, file_path: str):
-        file_path = f"{STORAGE}/{file_path}.json".replace(" ", "_")
+    def save_to_file(self, data: any, file_name: str):
+        file_path = f"{STORAGE}/{file_name}.json".replace(" ", "_")
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(data.__dict__))
