@@ -9,15 +9,15 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 def create_app(app_config=None):
     app.config.from_object(app_config)
 
-    create_armies_list()
-    from app.army import bp as army_bp
+    create_crusade_list()
     from app.core import bp as core_bp
+    from app.crusade import bp as crusade_bp
 
-    app.register_blueprint(army_bp)
     app.register_blueprint(core_bp)
+    app.register_blueprint(crusade_bp)
 
     return app
 
 
-def create_armies_list():
-    app.logger.info("Creating armies list...")
+def create_crusade_list():
+    app.logger.info("Loading crusades...")
