@@ -1,6 +1,6 @@
 import logging
 
-from app.core.file_handler import FileHandler
+from app.core.file_handler import FileHandler, STORAGE
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 
@@ -8,6 +8,9 @@ class Crusade:
     def __init__(self, name, faction):
         self.name = name
         self.faction = faction
+
+    def __str__(self):
+        return f"{self.name} - {self.faction}"
 
 
 class CrusadeService:
@@ -19,4 +22,4 @@ class CrusadeService:
 
     def load_all(self):
         logging.info('Loading all Crusades...')
-        return FileHandler.get_files_in_directory()
+        return STORAGE.get_crusades()

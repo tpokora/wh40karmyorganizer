@@ -3,12 +3,12 @@ from app.crusade.crusade import Crusade
 
 def test_new_faction():
     # give
-    name = "ArmyName"
+    crusade_force = "Crusade Force"
     faction = "Faction"
 
     # when
-    crusade = Crusade(name, faction)
+    crusade = Crusade(crusade_force, faction)
 
     # then
-    assert crusade.name == name
+    assert crusade.name == crusade_force
     assert crusade.faction == faction

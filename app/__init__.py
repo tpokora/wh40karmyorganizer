@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 def create_app(app_config=None):
     app.config.from_object(app_config)
 
-    create_crusade_list()
+    load_crusades()
     from app.core import bp as core_bp
     from app.crusade import bp as crusade_bp
 
@@ -19,5 +19,8 @@ def create_app(app_config=None):
     return app
 
 
-def create_crusade_list():
+def load_crusades():
     app.logger.info("Loading crusades...")
+    from app.core.in_memory_storage import STORAGE
+
+

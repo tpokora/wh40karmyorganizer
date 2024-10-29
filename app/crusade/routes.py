@@ -7,13 +7,13 @@ from app.crusade.crusade import Crusade, CrusadeService
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 
-faction_service = CrusadeService()
+crusade_service = CrusadeService()
 
 
 @bp.route('/crusade/', methods=['GET'])
 def get_all() -> Response:
-    all_factions = faction_service.load_all()
-    return jsonify(all_factions)
+    logging.info("Return all crusades...")
+    return jsonify(crusade_service.load_all())
 
 @bp.route('/crusade/', methods=['POST'])
 def create() -> Response:
@@ -21,7 +21,9 @@ def create() -> Response:
     faction = request.json['faction']
 
     crusade = Crusade(name=name, faction=faction)
+    logging.info(f"Creating crusade {crusade}")
 
-    saved_crusade = faction_service.save(crusade)
+    saved_crusade = crusade_service.save(crusade)
+    logging.info(f"Created crusade {saved_crusade}")
 
     return jsonify(saved_crusade)
