@@ -26,6 +26,8 @@ def test_get_files_in_directory():
 
     # then
     assert 1 == len(files_in_directory)
+    expected_file_name = f"{file_name}.json"
+    assert any(expected_file_name in file for file in files_in_directory)
     __remove_file(file_name)
 
 
