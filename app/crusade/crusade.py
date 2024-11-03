@@ -6,11 +6,11 @@ from app.core.in_memory_storage import Storage
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 
 class Crusade:
-    def __init__(self, crusade_force, faction, supply_limit):
+    def __init__(self, crusade_force, faction, supply_limit, supply_used=0):
         self.crusade_force = crusade_force
         self.faction = faction
         self.supply_limit = supply_limit
-        self.supply_used = 0
+        self.supply_used = supply_used
 
     def __str__(self):
         return f"Crusade(crusade_force={self.crusade_force}, faction={self.faction}, supply_limit={self.supply_limit}, supply_used={self.supply_used})"
@@ -41,7 +41,7 @@ class CrusadeService:
         self.storage = Storage()
 
     def save(self, crusade: Crusade) -> Crusade:
-        FileHandler.save_to_file(crusade, crusade.crusade_force)
+        FileHandler.save_to_file(crusade.obj2dict(), crusade.crusade_force)
         self.storage.save_crusade(crusade)
         logging.info(f'Saved {crusade.crusade_force}')
         return crusade
