@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 crusade_service = CrusadeService()
 
 
-@bp.route('/crusade/', methods=['GET'])
+@bp.route('/crusade', methods=['GET'])
 def get_all() -> tuple[Response, int]:
     logging.info("Return all crusades...")
     all_crusades_dict = []
@@ -20,7 +20,7 @@ def get_all() -> tuple[Response, int]:
         all_crusades_dict.append(crusade.obj2dict())
     return jsonify(all_crusades_dict), 200
 
-@bp.route('/crusade/', methods=['POST'])
+@bp.route('/crusade', methods=['POST'])
 def create() -> tuple[Response, int]:
     if request.is_json:
         data = request.get_json()
@@ -44,7 +44,7 @@ def create() -> tuple[Response, int]:
         saved_crusade = crusade_service.save(crusade)
         logging.info(f"Created crusade {saved_crusade}")
 
-        return jsonify(saved_crusade.obj2dict()), 200
+        return jsonify(saved_crusade.obj2dict()), 201
     else:
         return __error_response('Missing request body')
 
