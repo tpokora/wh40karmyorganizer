@@ -53,11 +53,14 @@ def import_all() -> tuple[Response, int]:
 
     if request.is_json:
         crusade_forces = request.get_json()
-        for crusade in crusade_forces:
-            logging.info(f"Crusade: {crusade}")
-            crusade_obj = Crusade.dict2obj(crusade)
-            crusade_service.save(crusade_obj)
-        return crusade_forces, 201
+        try:
+            for crusade in crusade_forces:
+                logging.info(f"Crusade: {crusade}")
+                crusade_obj = Crusade.dict2obj(crusade)
+                crusade_service.save(crusade_obj)
+            return crusade_forces, 201
+        except CrusadeFieldValidationException as ex:
+            return __error_response(ex.message)
     else:
         return __error_response("Could not load crusade forces from input JSON")
 
