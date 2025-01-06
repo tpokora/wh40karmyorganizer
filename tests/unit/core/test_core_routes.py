@@ -9,6 +9,7 @@ def client():
     with app.test_client() as client:
         yield client
 
+
 def test_home(client):
     """Test the home route."""
     # given

@@ -3,6 +3,7 @@ import os
 
 from app.core.file_handler import FileHandler
 
+
 def test_create_new_file():
     # given
     data = {'data': 'test_data'}
@@ -13,6 +14,7 @@ def test_create_new_file():
 
     # then
     __assert_file(data, file_name)
+
 
 def test_get_files_in_directory():
     # given

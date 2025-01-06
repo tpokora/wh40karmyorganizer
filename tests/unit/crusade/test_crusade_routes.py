@@ -16,13 +16,14 @@ def test_create_crusade(client):
     """Test the crusade creation route."""
     # given
     crusade_force = "Shadow Strike 5th Company"
+    faction = "Raven Guard"
     request_body = {
         "crusade_force": crusade_force,
-        "faction": "Raven Guard"
+        "faction": faction
     }
     expected_response = {
-        "crusade_force": "Shadow Strike 5th Company",
-        "faction": "Raven Guard",
+        "crusade_force": crusade_force,
+        "faction": faction,
         "supply_limit": 1000,
         "supply_used": 0
     }
@@ -40,13 +41,14 @@ def test_get_all_crusades_returns_list(client):
     """Test the get all crusades route. Should return crusade list"""
     # given
     crusade_force = "Shadow Strike 5th Company"
+    faction = "Raven Guard"
     request_body = {
         "crusade_force": crusade_force,
-        "faction": "Raven Guard"
+        "faction": faction
     }
     expected_response = {
-        "crusade_force": "Shadow Strike 5th Company",
-        "faction": "Raven Guard",
+        "crusade_force": crusade_force,
+        "faction": faction,
         "supply_limit": 1000,
         "supply_used": 0
     }
@@ -66,7 +68,7 @@ def test_create_crusade_returns_error_for_missing_crusade_force(client):
     """Test the get all crusades route. Should return error if crusade_force is missing"""
     # given
     request_body = {
-        "faction": "Raven Guard"
+        "faction": "faction"
     }
     expected_response = {
         "error": "Missing 'crusade_force' in request body"
