@@ -13,7 +13,7 @@ def client():
 def test_home(client):
     """Test the home route."""
     # given
-    expected_response = {'message' : 'Welcome to Warhammer 40K Army Organizer!'}
+    expected_response = {'message': 'Welcome to Warhammer 40K Army Organizer!'}
 
     # when
     response = client.get('/')

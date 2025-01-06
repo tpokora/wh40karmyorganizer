@@ -8,5 +8,5 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 
 @bp.route('/', methods=['GET'])
 def home() -> tuple[Response, int]:
-    home_response = {"message" : "Welcome to Warhammer 40K Army Organizer!"}
+    home_response = {"message": "Welcome to Warhammer 40K Army Organizer!"}
     return jsonify(home_response), 200

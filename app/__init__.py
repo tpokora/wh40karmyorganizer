@@ -32,6 +32,7 @@ def load_crusades_to_storage():
         crusades_from_file.append(__get_crusade_from_file(file_path))
     storage.load_crusades(crusades_from_file)
 
+
 def __get_crusade_from_file(file_path):
     with open(file_path, 'r') as file:
         return Crusade.dict2obj(json.load(file))
