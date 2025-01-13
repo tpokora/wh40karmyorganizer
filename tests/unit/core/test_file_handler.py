@@ -11,7 +11,10 @@ class FileStorageTest(unittest.TestCase):
         self.storage_path = self.__get_storage_path()
 
     def remove_file(self, file_name: str) -> None:
-        os.path.join(self.storage_path, file_name.join(".json"))
+        if " " in file_name:
+            file_name = file_name.replace(" ", "_")
+        file_path = os.path.join(self.storage_path, file_name + ".json")
+        os.remove(file_path)
 
     @staticmethod
     def __get_storage_path() -> str:
@@ -40,7 +43,6 @@ class FileHandlerTest(FileStorageTest):
 
             # then
             self.__assert_file(data, file_name)
-            self.remove_file(file_name)
 
     def test_get_files_in_directory(self):
         with patch.object(FileHandler, 'STORAGE_DIR', self.storage_path):

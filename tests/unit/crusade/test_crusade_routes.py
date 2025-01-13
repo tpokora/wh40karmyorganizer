@@ -65,7 +65,6 @@ class CrusadeAPI(FileStorageTest):
             assert response.status_code == 200
             assert len(response.json) != 0
             assert expected_response in response.json
-            self.remove_file(crusade_force)
 
     def test_create_crusade_returns_error_for_missing_crusade_force(self):
         """Test the get all crusades route. Should return error if crusade_force is missing"""
@@ -126,7 +125,6 @@ class CrusadeAPI(FileStorageTest):
             # then
             assert response.status_code == 400
             assert expected_response == response.json
-            self.remove_file(crusade_force)
 
 
 # Import crusade forces tests
