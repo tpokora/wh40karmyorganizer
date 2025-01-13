@@ -31,7 +31,7 @@ def create() -> tuple[Response, int]:
 
         return jsonify(saved_crusade.obj2dict()), 201
     except CrusadeFieldValidationException as ex:
-        return __error_response(ex.message)
+        return __error_response(ex.message, 400)
 
 
 @bp.route('/crusade/export', methods=['GET'])
@@ -60,10 +60,10 @@ def import_all() -> tuple[Response, int]:
                 crusade_service.save(crusade_obj)
             return crusade_forces, 201
         except CrusadeFieldValidationException as ex:
-            return __error_response(ex.message)
+            return __error_response(ex.message, 400)
     else:
-        return __error_response("Could not load crusade forces from input JSON")
+        return __error_response("Could not load crusade forces from input JSON", 400)
 
 
-def __error_response(message: str) -> tuple[Response, int]:
-    return jsonify({'error': message}), 400
+def __error_response(message: str, status_code: int) -> tuple[Response, int]:
+    return jsonify({'error': message}), status_code
