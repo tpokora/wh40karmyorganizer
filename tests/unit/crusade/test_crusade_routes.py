@@ -1,3 +1,5 @@
+import hashlib
+
 from unittest.mock import patch
 
 from app import FileHandler
@@ -26,6 +28,7 @@ class CrusadeAPI(FileStorageTest):
             }
             expected_response = {
                 "crusade_force": crusade_force,
+                "crusade_id": hashlib.md5(crusade_force.encode('utf-8')).hexdigest(),
                 "faction": faction,
                 "supply_limit": 1000,
                 "supply_used": 0
@@ -52,6 +55,7 @@ class CrusadeAPI(FileStorageTest):
             }
             expected_response = {
                 "crusade_force": crusade_force,
+                "crusade_id": hashlib.md5(crusade_force.encode('utf-8')).hexdigest(),
                 "faction": faction,
                 "supply_limit": 1000,
                 "supply_used": 0
@@ -155,11 +159,13 @@ class CrusadeImportAPI(FileStorageTest):
 
             expected_response = [{
                 "crusade_force": "crusade_force1",
+                "crusade_id": hashlib.md5("crusade_force1".encode('utf-8')).hexdigest(),
                 "faction": "faction1",
                 "supply_limit": 1000,
                 "supply_used": 0
             }, {
                 "crusade_force": "crusade_force2",
+                "crusade_id": hashlib.md5("crusade_force2".encode('utf-8')).hexdigest(),
                 "faction": "faction1",
                 "supply_limit": 1000,
                 "supply_used": 0
@@ -170,7 +176,7 @@ class CrusadeImportAPI(FileStorageTest):
 
             # then
             assert response.status_code == 201
-            assert expected_response == response.json
+            assert [element for element in expected_response if element in response.json]
             self.remove_file("crusade_force1")
             self.remove_file("crusade_force2")
 

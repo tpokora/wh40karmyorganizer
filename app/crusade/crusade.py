@@ -28,7 +28,7 @@ class CrusadeService:
         return crusades
 
     def __save_to_file(self, crusade: Crusade) -> Crusade:
-        FileHandler.save_to_file(crusade.obj2dict(), crusade.crusade_force)
+        FileHandler.save_to_file(crusade.obj2dict(), crusade.crusade_id)
         self.storage.save_crusade(crusade)
         return crusade
 

@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 
 class FileHandler:
 
-    STORAGE_DIR="storage"
+    STORAGE_DIR = "storage"
 
     @staticmethod
     def save_to_file(data: dict, file_name: str) -> None:
