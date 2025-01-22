@@ -27,6 +27,9 @@ class CrusadeService:
         crusades = self.storage.get_crusades()
         return crusades
 
+    def find_all_by_name(self, name):
+        return [crusade for crusade in self.storage.get_crusades() if name.lower() in crusade.crusade_force.lower()]
+
     def __save_to_file(self, crusade: Crusade) -> Crusade:
         FileHandler.save_to_file(crusade.obj2dict(), crusade.crusade_id)
         self.storage.save_crusade(crusade)

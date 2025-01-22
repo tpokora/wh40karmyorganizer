@@ -20,6 +20,15 @@ def get_all() -> tuple[Response, int]:
     return jsonify(all_crusade_forces_dict), 200
 
 
+@bp.route('/crusade/find/<name>', methods=['GET'])
+def find_all_by_name(name) -> tuple[Response, int]:
+    logging.info(f"Return crusade forces with name: {name} ...")
+    all_crusade_forces_dict = []
+    for crusade in crusade_service.find_all_by_name(name):
+        all_crusade_forces_dict.append(crusade.obj2dict())
+    return jsonify(all_crusade_forces_dict), 200
+
+
 @bp.route('/crusade', methods=['POST'])
 def create() -> tuple[Response, int]:
     try:
