@@ -22,12 +22,20 @@ class CrusadeService:
         logging.info(f'Saved {crusade.crusade_force}')
         return crusade
 
-    def get_all(self):
-        logging.info('Get all Crusades...')
+    def get_all(self) -> list[Crusade]:
+        logging.info('Get all Crusade forces...')
         crusades = self.storage.get_crusades()
         return crusades
 
-    def find_all_by_name(self, name):
+    def get_by_id(self, _id: str) -> Crusade:
+        logging.info(f'Get crusade force by id {_id}...')
+        crusades = self.storage.get_crusades()
+        crusade = [crusade for crusade in crusades if crusade.crusade_id == _id]
+        if len(crusade) == 0:
+            raise ValueError(f"Crusade force with id {_id} does not exist")
+        return crusade[0]
+
+    def find_all_by_name(self, name) -> list[Crusade]:
         return [crusade for crusade in self.storage.get_crusades() if name.lower() in crusade.crusade_force.lower()]
 
     def __save_to_file(self, crusade: Crusade) -> Crusade:

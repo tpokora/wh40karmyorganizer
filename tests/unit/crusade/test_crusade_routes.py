@@ -49,6 +49,52 @@ class CrusadeAPI(FileStorageTest):
             assert response.json == expected_response
             self.remove_file(crusade_id)
 
+    def test_get_crusade_by_id_should_return(self):
+        """Test the get crusade force by id route."""
+        with patch.object(FileHandler, 'STORAGE_DIR', self.storage_path):
+            assert FileHandler.STORAGE_DIR == self.storage_path
+            # given
+            crusade_force = "test_create_crusade_by_id"
+            faction = "Raven Guard"
+            request_body = {
+                "crusade_force": crusade_force,
+                "faction": faction
+            }
+            crusade_id = CrusadeTestHelper.get_crusade_id(crusade_force)
+            expected_response = {
+                "crusade_force": crusade_force,
+                "crusade_id": crusade_id,
+                "faction": faction,
+                "supply_limit": 1000,
+                "supply_used": 0
+            }
+            self.client.post('/crusade', json=request_body)
+
+            # when
+            response = self.client.get(f'/crusade/{crusade_id}')
+
+            # then
+            assert response.status_code == 200
+            assert response.json == expected_response
+            self.remove_file(crusade_id)
+
+    def test_get_crusade_by_id_should_exception_when_crusade_not_exist(self):
+        """Test the get crusade force by idroute."""
+        with patch.object(FileHandler, 'STORAGE_DIR', self.storage_path):
+            assert FileHandler.STORAGE_DIR == self.storage_path
+
+            # given
+            expected_response = {
+                "error": "Crusade force with id not_existing_crusade does not exist"
+            }
+
+            # when
+            response = self.client.get('/crusade/not_existing_crusade')
+
+            # then
+            assert response.status_code == 400
+            assert response.json == expected_response
+
     def test_get_all_crusades_returns_list(self):
         """Test the get all crusades route. Should return crusade list"""
         with patch.object(FileHandler, 'STORAGE_DIR', self.storage_path):
