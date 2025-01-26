@@ -5,7 +5,7 @@ from flask import Flask
 
 from app.core.file_handler import FileHandler
 from app.core.in_memory_storage import Storage
-from app.crusade.crusade import Crusade
+from app.crusade_force.crusade import Crusade
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
@@ -16,7 +16,7 @@ def create_app(app_config=None):
 
     load_crusades_to_storage()
     from app.core import bp as core_bp
-    from app.crusade import bp as crusade_bp
+    from app.crusade_force import bp as crusade_bp
 
     app.register_blueprint(core_bp)
     app.register_blueprint(crusade_bp)

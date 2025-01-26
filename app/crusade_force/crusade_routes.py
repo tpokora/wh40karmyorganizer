@@ -3,8 +3,8 @@ import logging
 from flask import jsonify, request, Response, make_response
 
 from app.core import bp
-from app.crusade.crusade import Crusade, CrusadeService
-from app.crusade.model import CrusadeFieldValidationException
+from app.crusade_force.crusade import Crusade, CrusadeService
+from app.crusade_force.model import CrusadeFieldValidationException
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 

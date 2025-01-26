@@ -13,14 +13,14 @@ def client():
 def test_home(client):
     """Test the home route."""
     # given
-    expected_response = {'message': 'Welcome to Warhammer 40K Army Organizer!'}
+    expected_header = b'<h1>Welcome to Warhammer 40K Army Organizer!</h1>'
 
     # when
     response = client.get('/')
 
     # then
     assert response.status_code == 200
-    assert response.json == expected_response
+    assert expected_header in response.data
 
 
 # Dice rolls

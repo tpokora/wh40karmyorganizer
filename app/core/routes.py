@@ -2,7 +2,7 @@ import logging
 
 
 from app.core import bp
-from flask import jsonify, Response
+from flask import jsonify, Response, render_template
 
 from app.core.dice_rolls import DiceRoll
 
@@ -10,9 +10,9 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 
 
 @bp.route('/', methods=['GET'])
-def home() -> tuple[Response, int]:
-    home_response = {"message": "Welcome to Warhammer 40K Army Organizer!"}
-    return jsonify(home_response), 200
+def home() -> str:
+    header = "Welcome to Warhammer 40K Army Organizer!"
+    return render_template('core/home.html', header=header)
 
 
 @bp.route('/dice_roll/<roll>', methods=['GET'])
