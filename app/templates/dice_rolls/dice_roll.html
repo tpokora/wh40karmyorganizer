@@ -1,0 +1,35 @@
+<!doctype html>
+<title>Dice rolls</title>
+<div>
+    <form method="post">
+        <p>
+            {{ form.dice_number.label }} <br/>
+            {{ form.dice_number(size=30) }}
+        </p>
+        <p>
+            {{ form.dice_size.label }} <br/>
+            {{ form.dice_size(size=30) }}
+        </p>
+        <p>
+            {{ form.roll() }}
+        </p>
+    </form>
+    <label for="dice_number">Dice Rolls</label>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li style="color: red;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <hr>
+    <div class="content">
+        <ul>
+            {% for roll in roll_results %}
+                <li>{{ roll }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

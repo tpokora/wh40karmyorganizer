@@ -1,6 +1,6 @@
 import unittest
 
-from app.core.dice_rolls import DiceRoll
+from app.dice_rolls.dice_rolls import DiceRoll
 
 
 class DiceRollTest(unittest.TestCase):

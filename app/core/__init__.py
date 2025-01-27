@@ -5,4 +5,4 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 
 bp = Blueprint('core', __name__)
 
-from app.core import routes
+from app.core import home_routes
