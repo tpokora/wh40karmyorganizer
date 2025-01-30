@@ -2,7 +2,7 @@ import logging
 
 from flask import render_template, flash
 
-from app.core import bp
+from app.dice_rolls import bp
 from app.dice_rolls.dice_roll_forms import DiceRollForm
 from app.dice_rolls.dice_rolls import DiceRoll
 
