@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Warhammer 40K Organizer{% endblock %}</title>
+    <style>
+        body {
+            background-color: #2a2a2a; /* Dark grey background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            font-family: Tahoma, sans-serif;
+        }
+        .centered-div {
+            width: 75%; /* 3/4 width */
+            background-color: #3c3c3c; /* Slightly lighter grey for the centered div */
+            padding: 20px;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+            color: #bebebe; /* Text color */
+        }
+    </style>
+</head>
+<body>
+<div class="centered-div">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

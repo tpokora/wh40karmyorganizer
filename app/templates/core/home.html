@@ -1,1 +1,7 @@
-<h1>{{ header }}</h1>
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>{{ header }}</h1>
+    <p>This is a centered div with a dark grey theme.</p>
+{% endblock %}
