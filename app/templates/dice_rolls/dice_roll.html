@@ -4,6 +4,7 @@
 {% block content %}
     <div>
         <form method="post">
+            {{ form.hidden_tag() }}
             <p>
                 {{ form.dice_number.label }} <br/>
                 {{ form.dice_number(size=30) }}
@@ -16,7 +17,6 @@
                 {{ form.roll() }}
             </p>
         </form>
-        <label for="dice_number">Dice Rolls</label>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class="flashes">
@@ -26,7 +26,9 @@
                 </ul>
             {% endif %}
         {% endwith %}
+        {% if roll_results %}
         <hr>
+        <h2>Dice rolls result</h2>
         <div class="content">
             <ul>
                 {% for roll in roll_results %}
@@ -34,5 +36,6 @@
                 {% endfor %}
             </ul>
         </div>
+        {% endif %}
     </div>
 {% endblock %}

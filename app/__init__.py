@@ -9,6 +9,7 @@ from app.crusade_force.crusade import Crusade
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
+app.config['WTF_CSRF_ENABLED'] = True
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 
