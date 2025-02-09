@@ -4,3 +4,4 @@
 storage
 # ... (other entries)
 .env
+.flaskenv
