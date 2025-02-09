@@ -2,3 +2,5 @@
 *.iml
 /venv
 storage
+# ... (other entries)
+.env
