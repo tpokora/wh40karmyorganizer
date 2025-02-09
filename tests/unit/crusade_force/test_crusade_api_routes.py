@@ -42,7 +42,7 @@ class CrusadeAPI(FileStorageTest):
             }
 
             # when
-            response = self.client.post('/crusade', json=request_body)
+            response = self.client.post('/api/crusade', json=request_body)
 
             # then
             assert response.status_code == 201
@@ -68,10 +68,10 @@ class CrusadeAPI(FileStorageTest):
                 "supply_limit": 1000,
                 "supply_used": 0
             }
-            self.client.post('/crusade', json=request_body)
+            self.client.post('/api/crusade', json=request_body)
 
             # when
-            response = self.client.get(f'/crusade/{crusade_id}')
+            response = self.client.get(f'/api/crusade/{crusade_id}')
 
             # then
             assert response.status_code == 200
@@ -89,7 +89,7 @@ class CrusadeAPI(FileStorageTest):
             }
 
             # when
-            response = self.client.get('/crusade/not_existing_crusade')
+            response = self.client.get('/api/crusade/not_existing_crusade')
 
             # then
             assert response.status_code == 400
@@ -114,10 +114,10 @@ class CrusadeAPI(FileStorageTest):
                 "supply_limit": 1000,
                 "supply_used": 0
             }
-            self.client.post('/crusade', json=request_body)
+            self.client.post('/api/crusade', json=request_body)
 
             # when
-            response = self.client.get('/crusade')
+            response = self.client.get('/api/crusade')
 
             # then
             assert response.status_code == 200
@@ -138,7 +138,7 @@ class CrusadeAPI(FileStorageTest):
             }
 
             # when
-            response = self.client.post('/crusade', json=request_body)
+            response = self.client.post('/api/crusade', json=request_body)
             assert response.status_code == 400
             assert expected_response == response.json
 
@@ -155,7 +155,7 @@ class CrusadeAPI(FileStorageTest):
             }
 
             # when
-            response = self.client.post('/crusade', json=request_body)
+            response = self.client.post('/api/crusade', json=request_body)
 
             # then
             assert response.status_code == 400
@@ -173,14 +173,14 @@ class CrusadeAPI(FileStorageTest):
                 "faction": faction
             }
             crusade_id = CrusadeTestHelper.get_crusade_id(crusade_force)
-            self.client.post('/crusade', json=request_body)
+            self.client.post('/api/crusade', json=request_body)
 
             expected_response = {
                 "error": f"Crusade force '{crusade_force}' exists"
             }
 
             # when
-            response = self.client.post('/crusade', json=request_body)
+            response = self.client.post('/api/crusade', json=request_body)
 
             # then
             assert response.status_code == 400
@@ -203,8 +203,8 @@ class CrusadeAPI(FileStorageTest):
                 "crusade_force": crusade_force2,
                 "faction": faction
             }
-            self.client.post('/crusade', json=request_body_first)
-            self.client.post('/crusade', json=request_body_second)
+            self.client.post('/api/crusade', json=request_body_first)
+            self.client.post('/api/crusade', json=request_body_second)
 
             expected_response = [{
                 "crusade_force": crusade_force1,
@@ -215,7 +215,7 @@ class CrusadeAPI(FileStorageTest):
             }]
 
             # when
-            response = self.client.get('/crusade/find/find')
+            response = self.client.get('/api/crusade/find/find')
 
             # then
             assert response.status_code == 200
@@ -268,7 +268,7 @@ class CrusadeImportAPI(FileStorageTest):
             }]
 
             # when
-            response = self.client.post('/crusade/import', json=request_body)
+            response = self.client.post('/api/crusade/import', json=request_body)
 
             # then
             assert response.status_code == 201
@@ -292,7 +292,7 @@ class CrusadeImportAPI(FileStorageTest):
             }
 
             # when
-            response = self.client.post('/crusade/import', json=request_body)
+            response = self.client.post('/api/crusade/import', json=request_body)
 
             # then
             assert response.status_code == 400

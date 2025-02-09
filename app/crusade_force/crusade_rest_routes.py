@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(
 crusade_service = CrusadeService()
 
 
-@bp.route('/crusade', methods=['GET'])
+@bp.route('/api/crusade', methods=['GET'])
 def get_all() -> tuple[Response, int]:
     logging.info("Return all crusade forces...")
     all_crusade_forces_dict = []
@@ -20,7 +20,7 @@ def get_all() -> tuple[Response, int]:
     return jsonify(all_crusade_forces_dict), 200
 
 
-@bp.route('/crusade/<crusade_id>', methods=['GET'])
+@bp.route('/api/crusade/<crusade_id>', methods=['GET'])
 def get_crusade_by_id(crusade_id: str) -> tuple[Response, int]:
     logging.info("Return crusade force...")
     try:
@@ -30,7 +30,7 @@ def get_crusade_by_id(crusade_id: str) -> tuple[Response, int]:
         return __error_response(ex.__str__(), 400)
 
 
-@bp.route('/crusade/find/<name>', methods=['GET'])
+@bp.route('/api/crusade/find/<name>', methods=['GET'])
 def find_all_by_name(name) -> tuple[Response, int]:
     logging.info(f"Return crusade forces with name: {name} ...")
     all_crusade_forces_dict = []
@@ -39,7 +39,7 @@ def find_all_by_name(name) -> tuple[Response, int]:
     return jsonify(all_crusade_forces_dict), 200
 
 
-@bp.route('/crusade', methods=['POST'])
+@bp.route('/api/crusade', methods=['POST'])
 def create() -> tuple[Response, int]:
     try:
         crusade = Crusade.from_request(request)
@@ -53,7 +53,7 @@ def create() -> tuple[Response, int]:
         return __error_response(ex.message, 400)
 
 
-@bp.route('/crusade/import', methods=['POST'])
+@bp.route('/api/crusade/import', methods=['POST'])
 def import_all() -> tuple[Response, int]:
     logging.info("Importing crusade forces...")
 
@@ -73,7 +73,7 @@ def import_all() -> tuple[Response, int]:
         return __error_response("Could not load crusade forces from input JSON", 400)
 
 
-@bp.route('/crusade/export', methods=['GET'])
+@bp.route('/api/crusade/export', methods=['GET'])
 def export_all() -> tuple[Response, int]:
     logging.info("Export all crusade forces...")
     all_crusade_forces_dict = []
