@@ -1,4 +1,5 @@
 import pytest
+from flask_wtf.csrf import generate_csrf
 
 from wh40k import app
 
@@ -29,11 +30,17 @@ def test_dice_rolls_form(client):
     # given
     expected_dice_rolls_result_header = b'<h2>Dice rolls result</h2>'
 
+    # Get CSRF token
+    csrf_token = _get_csrf_token(client)
+
     # when
-    response = client.post("dice_roll", data={
-        "dice_number": 2,
-        "dice_size": 32
+    response = client.post('/dice_roll', data={
+        'dice_number': '2',
+        'dice_size': '32',
+        'csrf_token': csrf_token
     })
+
+    # then
     assert response.status_code == 200
     assert expected_dice_rolls_result_header in response.data
 
@@ -51,3 +58,9 @@ def test_dice_rolls_form_validation_errors(client):
     assert response.status_code == 200
     assert expected_dice_number_validation_error in response.data
     assert expected_dice_size_validation_error in response.data
+
+
+def _get_csrf_token(client):
+    client.get('/dice_roll')
+    csrf_token = generate_csrf()
+    return csrf_token

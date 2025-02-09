@@ -20,7 +20,7 @@ def dice_rolls() -> str:
     return render_template(ROLLS_DICE_ROLL_HTML_TEMPLATE, form=form)
 
 
-def __handle_form(form) -> str:
+def __handle_form(form: DiceRollForm) -> str:
     if form.validate_on_submit():
         roll_results = DiceRoll(f'{form.dice_number.data}d{form.dice_size.data}').roll()
         return render_template(ROLLS_DICE_ROLL_HTML_TEMPLATE, form=form, roll_results=roll_results)
