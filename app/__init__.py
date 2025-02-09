@@ -17,33 +17,43 @@ load_dotenv()
 
 
 def create_app(app_config=None):
-    app = Flask(__name__)
+    wh40k_app = Flask(__name__)
+    __configure(wh40k_app, app_config)
+    __configure_database_connection(wh40k_app)
+
+    load_crusades_to_storage(wh40k_app)
+
+    from app.core import bp as core_bp
+    from app.dice_rolls import bp as dice_rolls_bp
+    from app.crusade_force import bp as crusade_bp
+
+    wh40k_app.register_blueprint(core_bp)
+    wh40k_app.register_blueprint(dice_rolls_bp)
+    wh40k_app.register_blueprint(crusade_bp)
+
+    return wh40k_app
+
+
+def __configure(app: Flask, app_config):
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config.from_object(app_config)
 
-    db.init_app(app)
 
-    # Test database connection
+def __configure_database_connection(app:Flask) -> None:
+    db.init_app(app)
+    __test_db_connection(app)
+
+
+def __test_db_connection(app: Flask) -> None:
     with app.app_context():
         try:
             db.engine.connect()
-            print("Successfully connected to the database.")
+            logging.info("Successfully connected to the database.")
         except Exception as e:
-            print(f"Failed to connect to the database. Error: {e}")
-
-    load_crusades_to_storage(app)
-    from app.core import bp as core_bp
-    from app.dice_rolls import bp as dice_rolls_bp
-    from app.crusade_force import bp as crusade_bp
-
-    app.register_blueprint(core_bp)
-    app.register_blueprint(dice_rolls_bp)
-    app.register_blueprint(crusade_bp)
-
-    return app
+            logging.error(f"Failed to connect to the database. Error: {e}")
 
 
 def load_crusades_to_storage(app: Flask) -> None:
@@ -68,10 +78,9 @@ def init_db():
     with app.app_context():
         try:
             db.create_all()
-            print("Database tables created successfully.")
-            # Print the list of created tables
-            print("Created tables:")
+            logging.info("Database tables created successfully.")
+            logging.info("Created tables:")
             for table in db.metadata.tables:
-                print(f"- {table}")
+                logging.info(f"- {table}")
         except Exception as e:
-            print(f"An error occurred while creating tables: {e}")
+            logging.error(f"An error occurred while creating tables: {e}")
