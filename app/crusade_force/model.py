@@ -1,5 +1,4 @@
 import logging
-import hashlib
 
 from flask import Request
 
@@ -15,7 +14,7 @@ class CrusadeFieldValidationException(Exception):
 class Crusade:
     DEFAULT_SUPPLY_LIMIT = 1000
 
-    def __init__(self, crusade_id: str, crusade_force: str, faction: str, supply_limit: int, supply_used: int = 0):
+    def __init__(self, crusade_id: int | None, crusade_force: str, faction: str, supply_limit: int, supply_used: int = 0):
         self.crusade_id = crusade_id
         self.crusade_force = crusade_force
         self.faction = faction
@@ -35,18 +34,6 @@ class Crusade:
         }
 
     @staticmethod
-    def dict2obj(input_dict: dict):
-        crusade_id = input_dict.get('crusade_id')
-        crusade_force = input_dict.get('crusade_force')
-        faction = input_dict.get('faction')
-        supply_limit = input_dict.get('supply_limit')
-        supply_used = input_dict.get('supply_used')
-
-        crusade = Crusade(crusade_id, crusade_force, faction, supply_limit, supply_used)
-
-        return crusade
-
-    @staticmethod
     def from_request(request: Request):
         if request.is_json:
             data = request.get_json()
@@ -63,6 +50,6 @@ class Crusade:
         if faction is None:
             raise CrusadeFieldValidationException("Missing 'faction' in request body")
         supply_limit = crusade_dict.get('supply_limit')
-        crusade_id = hashlib.md5(crusade_force.encode('utf-8')).hexdigest()
+        crusade_id = crusade_dict.get('crusade_id')
 
         return Crusade(crusade_id, crusade_force, faction, supply_limit)

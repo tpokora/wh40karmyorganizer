@@ -1,9 +1,9 @@
-from app import db
+from app.database import db
 
 
 class CrusadeForce(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
     faction = db.Column(db.String(50), nullable=False)
     supply_limit = db.Column(db.Integer, default=50)
 
