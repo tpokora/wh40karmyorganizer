@@ -1,12 +1,4 @@
-import hashlib
-
 from tests.unit.crusade_force.db_test import DatabaseTest
-
-
-class CrusadeTestHelper:
-    @staticmethod
-    def get_crusade_id(crusade_force):
-        return hashlib.md5(crusade_force.encode('utf-8')).hexdigest()
 
 
 class CrusadeAPI(DatabaseTest):
