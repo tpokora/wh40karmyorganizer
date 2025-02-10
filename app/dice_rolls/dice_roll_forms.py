@@ -15,3 +15,5 @@ class DiceRollForm(FlaskForm):
     def validate_dice_size(self, field):
         if not field.data.isdigit():
             raise ValidationError("Dice size must be a numeric value")
+        if int(field.data) < 2:
+            raise ValidationError("Dice size must be bigger then 1")
