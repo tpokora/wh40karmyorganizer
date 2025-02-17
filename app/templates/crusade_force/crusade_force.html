@@ -9,10 +9,10 @@
                 <ul>
                     {% for crusade in crusade_forces %}
                         <li>
-                            <h3>{{ crusade.crusade_force }}</h3>
-                            <p>Faction: {{ crusade.faction }}</p>
-                            <p>Supply Limit: {{ crusade.supply_limit }}</p>
-                            <p>Supply Used: {{ crusade.supply_used }}</p>
+                            <h3><a href="{{ url_for('crusade.crusade_force_detail', crusade_id=crusade.crusade_id) }}">
+                                {{ crusade.crusade_force }}
+                            </a></h3>
+                            <p>Faction: {{ crusade.faction }} | {{ crusade.supply_used }}/{{ crusade.supply_limit }}</p>
                         </li>
                     {% endfor %}
                 </ul>
@@ -20,8 +20,8 @@
                 <p>No crusade forces found.</p>
             {% endif %}
         </div>
-{#        <div class="add-crusade">#}
-{#            <a href="{{ url_for('crusade_force.create_crusade') }}" class="btn btn-primary">Add New Crusade Force</a>#}
-{#        </div>#}
+        {#        <div class="add-crusade">#}
+        {#            <a href="{{ url_for('crusade_force.create_crusade') }}" class="btn btn-primary">Add New Crusade Force</a>#}
+        {#        </div>#}
     </div>
 {% endblock %}

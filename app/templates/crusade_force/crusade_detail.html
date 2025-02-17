@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Crusade forces{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Crusade forces</h1>
+        <div class="crusade-forces-list">
+            {% if crusade %}
+                <ul>
+                    <li>
+                        <h3>{{ crusade.crusade_force }}</h3>
+                        <p>Faction: {{ crusade.faction }}</p>
+                        <p>Supply Limit: {{ crusade.supply_limit }}</p>
+                        <p>Supply Used: {{ crusade.supply_used }}</p>
+                    </li>
+                </ul>
+            {% else %}
+                <p>No crusade force found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

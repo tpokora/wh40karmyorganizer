@@ -13,6 +13,25 @@ class CrusadeViews(DatabaseTest):
     def tearDown(self):
         super().tearDown()
 
+    @patch.object(CrusadeService, 'get_by_id')
+    def test_crusade_force_detail_with_valid_crusade(self, mock_get_by_id):
+        # given
+        crusade_id = '1'
+        crusade = Crusade(crusade_id=1, crusade_force='Test Force', faction='Test Faction', supply_limit=1000, supply_used=200)
+        mock_get_by_id.return_value = crusade
+        expected_template = 'crusade_force/crusade_detail.html'
+
+        # when
+        response = self.client.get(f'/crusades/{crusade_id}')
+
+        # then
+        assert response.status_code == 200
+        self.assert_template_used(expected_template)
+        assert b'Test Force' in response.data
+        assert b'Faction: Test Faction' in response.data
+        assert b'Supply Limit: 1000' in response.data
+        assert b'Supply Used: 200' in response.data
+
     @patch.object(CrusadeService, 'get_all')
     def test_crusade_forces_home_with_empty_list(self, mock_get_all):
         # given
@@ -40,7 +59,5 @@ class CrusadeViews(DatabaseTest):
         # then
         assert response.status_code == 200
         assert expected_crusade_home_header in response.data
-        assert b'<h3>Test Force</h3>' in response.data
-        assert b'<p>Faction: Test Faction</p>' in response.data
-        assert b'<p>Supply Limit: 1000</p>' in response.data
-        assert b'<p>Supply Used: 200</p>' in response.data
+        assert b'Test Force' in response.data
+        assert b'<p>Faction: Test Faction | 200/1000</p>' in response.data
